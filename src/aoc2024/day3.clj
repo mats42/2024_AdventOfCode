@@ -38,12 +38,10 @@
       enabled (recur rest (+ result (run-op op)) enabled)
       :else (recur rest result enabled))))
 
-(print
- "Day 3, part 1:"
- (solve1 input)
- "\nDay 3, part 2:"
- (solve2 input))
 
+;; Print solutions
+(println "Day 3, part 1:" (solve1 input))
+(println "Day 3, part 2:" (solve2 input))
 
 
 (comment

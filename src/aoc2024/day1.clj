@@ -29,11 +29,9 @@
         total-similarity (reduce + similarity-scores)]
     total-similarity))
 
-(print
- "Day 1, part 1:"
- (solve1 input)
- "\nDay 1, part 2:"
- (solve2 input))
+;; Print solutions
+(println "Day 1, part 1:" (solve1 input))
+(println "Day 1, part 2:" (solve2 input))
 
 
 (comment

@@ -45,12 +45,9 @@
         ]
    (count safe-reports)))
 
-
-(print
- "Day 2, part 1:"
- (solve1 input)
- "\nDay 2, part 2:"
- (solve2 input))
+;; Print solutions
+(println "Day 2, part 1:" (solve1 input))
+(println "Day 2, part 2:" (solve2 input))
 
 
 (comment
@@ -69,5 +66,5 @@
 1 3 2 4 5
 8 6 4 4 1
 1 3 6 7 9")
-  
+
   )
