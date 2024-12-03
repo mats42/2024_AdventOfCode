@@ -1,0 +1,11 @@
+.calva/
+.cpcache/
+.clj-kondo/
+.lsp/
+.vscode/
+target/
+.DS_Store
+.nrepl-port
+
+# AoC inputs are personal and should not be exposed
+src/resources/
