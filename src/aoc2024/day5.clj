@@ -1,7 +1,6 @@
 (ns aoc2024.day5
   (:require
-   [clojure.string :as string]
-   [clojure.core :as core]))
+   [clojure.string :as string]))
 
 (def input (slurp "src/resources/day5.txt"))
 
@@ -40,19 +39,32 @@
          (reduce +))))                             ;; Sum it up
 
 
-(defn mend-one-error
-  [errata errors]
-  (let [[left-idx right-idx] (first errors) ;; Pick the first error 
-        left (errata left-idx)
-        right (errata right-idx)
-        mended (assoc errata right-idx left left-idx right)]
-    mended))
+(defn swap [errata idx1 idx2]
+  (let [val1 (errata idx1)
+        val2 (errata idx2)]
+    (assoc! errata idx1 val2 idx2 val1)))
 
-(defn mend-it [rules errata]
+
+(defn mend-some [errata errors]
+  ;; Fix as many errors as possible without needing another pass
+  (let [errata (transient errata)  ;; Use mutable data structures for performance
+        affected-indices (transient #{})]
+    (loop [[[idx1 idx2] & rest] errors]
+      (if (nil? idx1) (persistent! errata)
+          (do
+            (when (not-any? affected-indices [idx1 idx2])
+                (conj! affected-indices idx1)
+                (conj! affected-indices idx2)
+                (swap errata idx1 idx2))
+
+            (recur rest))))))
+        
+
+(defn mend-errata [rules errata]
   (loop [cnt 0
          errata errata
          errors (check-errata rules errata)]
-    (let [maybe-mended (mend-one-error errata errors)
+    (let [maybe-mended (mend-some errata errors)
           errors (check-errata rules maybe-mended)]
       (if (empty? errors)
         maybe-mended  ;; Return the mended errata
@@ -63,7 +75,7 @@
   (let [[rules erratas] (parse input)
         broken-erratas (filter #(not-empty (check-errata rules %)) erratas)]
     (->> broken-erratas
-         (mapv #(mend-it rules %))
+         (mapv #(mend-errata rules %))             ;; Fix broken erratas
          (mapv middle-page-number)                 ;; Pick middle page number
          (reduce +))))                             ;; Sum it up
 
@@ -72,8 +84,8 @@
 (println "Day 5, part 1:" (solve1 input))
 (println "Day 5, part 2:" (solve2 input))
 
-
 (comment
+
   (def example-input "47|53
 97|13
 97|61
@@ -106,4 +118,7 @@
   ;; Testing the example input
   (solve1 example-input)
   (solve2 example-input)
-  (solve2 input))
+
+  (time (solve2 input))
+
+  )
