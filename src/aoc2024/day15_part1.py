@@ -1,5 +1,4 @@
 # %%
-import re, time
 import matplotlib.pyplot as plt
 
 # Load input data
@@ -90,7 +89,7 @@ def solve1(input, w=101, h=103, seconds=100):
         x,y = box
         gps = 100*y+x
         sum += gps
-        
+
     print("Day 15 part 1: ", sum)        
 
 # %%
